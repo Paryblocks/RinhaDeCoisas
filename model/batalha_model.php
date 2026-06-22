@@ -4,8 +4,7 @@ require_once __DIR__ . "/../util/conexao.php";
 class Batalha{
     private $id, $data_batalha, $resultado, $recompensa, $usuario_id;
 
-     public function __construct($data_batalha, $resultado, $recompensa, $usuario_id){
-        $this->data_batalha = $data_batalha;
+     public function __construct($resultado, $recompensa, $usuario_id){
         $this->resultado = $resultado;
         $this->recompensa = $recompensa;
         $this->usuario_id = $usuario_id;
@@ -13,8 +12,7 @@ class Batalha{
 
     public function salvar(){
         $conn = getConnection();
-        $stmt = $conn->prepare("INSERT INTO batalhas (data_batalha, resultado, recompensa, usuario_id) VALUES (:data_batalha, :resultado, :recompensa, :usuario_id)");
-        $stmt->bindParam(":data_batalha", $this->data_batalha);
+        $stmt = $conn->prepare("INSERT INTO batalhas (resultado, recompensa, usuario_id) VALUES (:resultado, :recompensa, :usuario_id)");
         $stmt->bindParam(":resultado", $this->resultado);
         $stmt->bindParam(":recompensa", $this->recompensa);
         $stmt->bindParam(":usuario_id", $this->usuario_id);

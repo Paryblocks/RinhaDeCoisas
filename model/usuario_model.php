@@ -4,20 +4,18 @@ require_once __DIR__ . "/../util/conexao.php";
 class Usuario{
     private $id, $nome, $email, $senha, $saldo;
 
-     public function __construct($nome, $email, $senha, $saldo){
+     public function __construct($nome, $email, $senha){
         $this->nome = $nome;
         $this->email = $email;
         $this->senha = $senha;
-        $this->saldo = $saldo;
     }
 
     public function salvar(){
         $conn = getConnection();
-        $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, senha, saldo) VALUES (:nome, :email, :senha, :saldo)");
+        $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)");
         $stmt->bindParam(":nome", $this->nome);
         $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":senha", $this->senha);
-        $stmt->bindParam(":saldo", $this->saldo);
         if ($stmt->execute()) {
             return $conn->lastInsertId();
         }

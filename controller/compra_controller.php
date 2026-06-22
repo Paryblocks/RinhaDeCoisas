@@ -23,7 +23,7 @@ if($preco > $_SESSION['saldo']) {
     exit;
 }
 
-$novaCompra = new Compra($comprador_id, $lutador_id, NULL, $preco);
+$novaCompra = new Compra($comprador_id, $lutador_id, $preco);
 if ($novaCompra->salvar()) {
     $novoSaldo = $_SESSION['saldo'] - $preco;
     if(Usuario::atualizarSaldo($comprador_id, $novoSaldo)){

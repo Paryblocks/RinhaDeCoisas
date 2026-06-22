@@ -37,6 +37,14 @@ class Lutador{
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public static function buscarPorDono($id) {
+        $conn = getConnection();
+        $stmt = $conn->prepare("SELECT * FROM lutadores WHERE criador_id = :id");
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function buscarInimigo($id) {
         $conn = getConnection();
         $stmt = $conn->prepare("SELECT * FROM lutadores WHERE id != :id ORDER BY RAND() LIMIT 1");

@@ -79,7 +79,7 @@ if ($response) {
 
         $recompensa = ($quemVenceu === 'jogador') ? 100.00 : 10.00;
 
-        $batalha = new Batalha(null, $resultadoTexto, $recompensa, $_SESSION['usuario_id']);
+        $batalha = new Batalha($resultadoTexto, $recompensa, $_SESSION['usuario_id']);
         $batalha_id = $batalha->salvar();
 
         if ($batalha_id) {
