@@ -1,0 +1,42 @@
+<?php
+require_once __DIR__ . "/../util/conexao.php";
+
+class Compra{
+    private $id, $comprador_id, $lutador_id, $data_compra, $valor;
+
+     public function __construct($comprador_id, $lutador_id, $data_compra, $valor){
+        $this->comprador_id = $comprador_id;
+        $this->lutador_id = $lutador_id;
+        $this->data_compra = $data_compra;
+        $this->valor = $valor;
+    }
+
+    public function salvar(){
+        $conn = getConnection();
+        $stmt = $conn->prepare("INSERT INTO compras (comprador_id, lutador_id, data_compra, valor) VALUES (:comprador_id, :lutador_id, :data_compra, :valor)");
+        $stmt->bindParam(":comprador_id", $this->comprador_id);
+        $stmt->bindParam(":lutador_id", $this->lutador_id);
+        $stmt->bindParam(":data_compra", $this->data_compra);
+        $stmt->bindParam(":valor", $this->valor);
+        if ($stmt->execute()) {
+            return $conn->lastInsertId();
+        }
+    }
+
+    public static function buscarPorId(int $id) {
+        $conn = getConnection();
+        $stmt = $conn->prepare("SELECT * FROM compras WHERE id = :id");
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function listarTudo() {
+        $conn = getConnection();
+        $stmt = $conn->query("SELECT * FROM compras");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+}
+
+?>
