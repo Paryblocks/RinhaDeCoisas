@@ -55,8 +55,8 @@ require_once __DIR__ . "/../components/header.php";
                 <hr>
 
                 <a href="../controller/usuario_controller.php?acao=excluir&id=<?= $_SESSION['usuario_id']?>" 
-                    class="btn w-100 mb-3 btn-outline-danger"
-                    onclick="return confirm('Tem certeza absoluta que deseja excluir sua conta? Esta ação não pode ser desfeita!');>
+                    class="btn w-100 mb-3 btn-outline-danger" 
+                    onclick="return confirm('Tem certeza absoluta que deseja excluir sua conta? Esta ação não pode ser desfeita!');">
                     Excluir conta
                 </a>
 
