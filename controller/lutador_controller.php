@@ -37,16 +37,81 @@ if(isset($_REQUEST['acao'])){
         break;
 
     case 'excluir':
-        if (Lutador::excluir($_GET['id'])) {
-            header('location: ../view/loja.php');
+        $id = $_GET['id'];
+        $lutador = Lutador::buscarPorId($id);
+        if ($lutador) {
+            if ($lutador['criador_id'] != $_SESSION['usuario_id']) {
+                header("location: ../view/loja.php?erro=Você não tem permissão para deletar este lutador!");
+                exit;
+            }
+
+            $vendasParaOutros = Compra::contarVendasParaOutros($id, $lutador['criador_id']);
+
+            if ($vendasParaOutros > 0) {
+                header("location: ../view/item.php?id={$id}&erro=Este lutador já foi comprado por outros jogadores e não pode ser deletado!");
+                exit;
+            }
+            
+            if (Lutador::excluir($id)) {
+                header("location: ../view/loja.php?sucesso=Lutador deletado com sucesso!");
+                exit;
+            } else {
+                header("location: ../view/item.php?id={$id}&erro=Erro ao deletar o lutador.");
+                exit;
+            }
+        } else {
+            header("location: ../view/loja.php?erro=Lutador não encontrado.");
             exit;
         }
         break;
 
     case 'atualizar':
-        $updatedLutador = new Lutador($_POST['nome'], $_POST['descricao'], $_POST['ataque'], $_POST['defesa'], $_POST['velocidade'], $_POST['preco'], $_SESSION['usuario_id']);
-        if ($updatedLutador->atualizar($_GET['id'])) {
-            header('location: ../view/perfil.php');
+        $id = $_POST['id'];
+        $ataque = $_POST['ataque'];
+        $defesa = $_POST['defesa'];
+        $velocidade = $_POST['velocidade'];
+
+        $valor_antigo = Lutador::buscarPorId($id);
+
+        if ($valor_antigo) {
+            if ($ataque < $valor_antigo['ataque'] || 
+                $defesa < $valor_antigo['defesa'] || 
+                $velocidade < $valor_antigo['velocidade']) {
+                
+                header("location: ../view/item.php?id={$id}&erro=Não é permitido diminuir os atributos de um lutador!");
+                exit;
+            }
+
+            $soma_pontos = $ataque + $defesa + $velocidade;
+            if ($soma_pontos > 27) {
+                header("location: ../view/item.php?id={$id}&erro=Limite de treino excedido!");
+                exit;
+            }
+
+            $novo_preco = $soma_pontos * 100;
+            $custo = $novo_preco - $valor_antigo['preco']; 
+            
+            if ($custo > 0 && $custo > $_SESSION['saldo']) {
+                header("location: ../view/item.php?id={$id}&erro=Dinheiro Insuficiente para o treinamento!");
+                exit;
+            }
+        } else {
+            header("location: ../view/loja.php?erro=Lutador não encontrado.");
+            exit;
+        }
+
+        $lutadorAtualizado = new Lutador($_POST['nome'], $_POST['descricao'], $ataque, $defesa, $velocidade, $novo_preco, $_SESSION['usuario_id']);
+        if ($lutadorAtualizado->atualizar($id)) {
+            if ($custo > 0) {
+                $novoSaldo = $_SESSION['saldo'] - $custo;
+                if (Usuario::atualizarSaldo($_SESSION['usuario_id'], $novoSaldo)) {
+                    $_SESSION['saldo'] = $novoSaldo;
+                }
+            }
+            header("location: ../view/item.php?id={$id}&sucesso=Lutador atualizado e treinado!");
+            exit;
+        } else {
+            header("location: ../view/item.php?id={$id}&erro=Erro ao atualizar no banco.");
             exit;
         }
         break;

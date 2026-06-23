@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . "/../util/verifica_login.php";
 require_once __DIR__ . "/../model/usuario_model.php";
 require_once __DIR__ . "/../model/lutador_model.php";
 
@@ -84,7 +83,7 @@ require_once __DIR__ . "/../components/header.php";
                                     </div>
                                     
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <span class="badge bg-success fs-6">L$ <?= number_format($lutador['preco'], 2, ',', '.') ?></span>
+                                        <span class="badge bg-success fs-6">$ <?= number_format($lutador['preco'], 2, ',', '.') ?></span>
                                         <a href="item.php?id=<?= $lutador['id'] ?>" class="btn btn-sm btn-outline-primary">Ver Detalhes</a>
                                     </div>
                                 </div>

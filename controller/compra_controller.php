@@ -4,12 +4,12 @@ require_once __DIR__ . "/../model/compra_model.php";
 require_once __DIR__ . "/../model/lutador_model.php";
 require_once __DIR__ . "/../model/usuario_model.php";
 
-if (!isset($_GET['id'])) {
+if (!isset($_POST['lutador_id'])) {
     header('location: ../view/loja.php');
     exit;
 }
 
-$lutador_id = $_GET['id'];
+$lutador_id = $_POST['lutador_id'];
 $comprador_id = $_SESSION['usuario_id'];
 
 $lutador = Lutador::buscarPorId($lutador_id);

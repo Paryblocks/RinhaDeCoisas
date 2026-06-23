@@ -1,16 +1,40 @@
 <?php
+require_once __DIR__ . "/../model/lutador_model.php";
+$lutadores = Lutador::listarTudo();
+
 require_once __DIR__ . "/../components/header.php"; 
 ?>
 
-<div class="row">
-    <div class="col-12 text-center my-4">
-        <h1>Bem-vindo a Rinha de Coisas!</h1>
-        <p class="lead">Compre, venda e bote seus lutadores (por mais malucos que sejam) para brigar!</p>
-        <hr>
-        <p>Para começar, crie uma conta na plataforma! Após isso compre um lutador para levar para a arena ou crie o seu próprio para os demais comprarem!</p>
-        <p>Ganhe dinheiro lutando na arena ou vendendo seus lutadores mais criativos na loja!</p>
-        <p>Continue expandindo seu elenco de lutadores com o dinheiro adquirido, eles podem ser qualquer coisa, desde uma cadeira até um megazord!</p>
-    </div>
+<div class="col-12 mt-4">
+    <h3 class="text-center mb-4">Loja de Lutadores</h3>
+            
+    <?php if (empty($lutadores)): ?>
+        <p class="text-center text-muted">Nenhum lutador na arena?!? Vá criar alguns!</p>
+    <?php else: ?>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <?php foreach ($lutadores as $lutador): ?>
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary"><?= htmlspecialchars($lutador['nome']) ?></h5>
+                            <p class="card-text text-muted text-truncate"><?= htmlspecialchars($lutador['descricao']) ?></p>
+                                    
+                            <div class="bg-light p-2 rounded mb-3 small">
+                                <strong>ATK:</strong> <?= $lutador['ataque'] ?> | 
+                                <strong>DEF:</strong> <?= $lutador['defesa'] ?> | 
+                                <strong>VEL:</strong> <?= $lutador['velocidade'] ?>
+                            </div>
+                                    
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success fs-6">$ <?= number_format($lutador['preco'], 2, ',', '.') ?></span>
+                                <a href="item.php?id=<?= $lutador['id'] ?>" class="btn btn-sm btn-outline-primary">Ver Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </div>
 
 <?php 
