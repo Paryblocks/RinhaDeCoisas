@@ -48,9 +48,17 @@ class Compra{
     return $resultado['total'];
 }
 
-    public static function listarTudo() {
+    public static function listarPorComprador($comprador_id) {
         $conn = getConnection();
-        $stmt = $conn->query("SELECT * FROM compras");
+        $stmt = $conn->prepare("
+            SELECT c.*, l.nome AS nome_lutador 
+            FROM compras c
+            INNER JOIN lutadores l ON c.lutador_id = l.id
+            WHERE c.comprador_id = :comprador_id
+            ORDER BY c.id DESC
+        ");
+        $stmt->bindParam(":comprador_id", $comprador_id);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
