@@ -31,8 +31,8 @@ class Batalha{
 
     public static function listarPorUsuario($usuario_id) {
         $conn = getConnection();
-        $stmt = $conn->prepare("
-            SELECT 
+        $stmt = $conn->prepare(
+            "SELECT 
             b.id AS batalha_id,
             b.data_batalha,
             b.resultado,
@@ -40,13 +40,12 @@ class Batalha{
             l1.nome AS lutador_casa,
             l2.nome AS lutador_fora
             FROM batalhas b
-            INNER JOIN lutador_batalha lb1 ON b.id = lb1.batalha_id AND lb1.equipe = 1
+            INNER JOIN lutador_batalha lb1 ON b.id = lb1.batalha_id AND lb1.equipe = 'Jogador'
             INNER JOIN lutadores l1 ON lb1.lutador_id = l1.id
-            INNER JOIN lutador_batalha lb2 ON b.id = lb2.batalha_id AND lb2.equipe = 2
+            INNER JOIN lutador_batalha lb2 ON b.id = lb2.batalha_id AND lb2.equipe = 'Oponente'
             INNER JOIN lutadores l2 ON lb2.lutador_id = l2.id
             WHERE b.usuario_id = :usuario_id
-            ORDER BY b.id DESC
-        ");        
+            ORDER BY b.id DESC");        
         $stmt->bindParam(":usuario_id", $usuario_id);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

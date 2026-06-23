@@ -45,6 +45,14 @@ class Lutador{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function buscarDisponivel($id) {
+        $conn = getConnection();
+        $stmt = $conn->prepare("SELECT l.*, l.id as id FROM lutadores l INNER JOIN compras c ON l.id = c.lutador_id WHERE c.comprador_id = :id");
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function buscarInimigo($id) {
         $conn = getConnection();
         $stmt = $conn->prepare("SELECT * FROM lutadores WHERE id != :id ORDER BY RAND() LIMIT 1");
