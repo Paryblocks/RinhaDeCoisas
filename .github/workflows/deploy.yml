@@ -1,0 +1,24 @@
+name: Deploy via ftp
+on: push
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Criar arquivo de credenciais da IA
+      run: |
+        echo "<?php define('GEMINI_KEY', '${{ secrets.GEMINI_API_KEY }}'); ?>" > util/config_env.php
+
+    - name: Criar arquivo de credenciais do E-mail
+      run: |
+        echo "<?php define('MAIL_PASSWORD', '${{ secrets.MAIL_PASSWORD }}'); ?>" > util/mail_env.php
+
+    - name: FTP Deploy Locaweb
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.HOST }} 
+        username: ${{ secrets.USER }}
+        password: ${{ secrets.PASS }}
+        server-dir: public_html/

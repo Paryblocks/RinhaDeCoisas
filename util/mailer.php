@@ -6,6 +6,8 @@ require __DIR__ . '/../PHPMailer/src/Exception.php';
 require __DIR__ . '/../PHPMailer/src/PHPMailer.php';
 require __DIR__ . '/../PHPMailer/src/SMTP.php';
 
+require_once __DIR__ . '/../util/mail_env.php';
+
 $mail = new PHPMailer(true);
 
 $email = $_POST['email'];
@@ -25,7 +27,7 @@ try
     $mail->isSMTP();
     $mail->SMTPAuth = true;
     $mail->Username   = '2024001428@aluno.canoas.ifrs.edu.br';
-    $mail->Password   = 'minha senha';
+    $mail->Password   = MAIL_PASSWORD;
 
     $mail->SMTPSecure = 'tls';
     $mail->Host = 'smtp.gmail.com';

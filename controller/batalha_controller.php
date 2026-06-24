@@ -11,6 +11,8 @@ require_once __DIR__ . "/../model/batalha_model.php";
 require_once __DIR__ . "/../model/lutador_model.php";
 require_once __DIR__ . "/../model/usuario_model.php";
 
+require_once __DIR__ . '/../util/config_env.php';
+
 header('Content-Type: application/json');
 
 $json_recebido = file_get_contents("php://input");
@@ -31,7 +33,6 @@ if (!$lutador_usuario || !$oponente) {
     exit;
 }
 
-$apiKey = "minha chave";
 $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 $prompt = "Você é o juiz supremo de uma arena de batalhas de anime. 
@@ -68,7 +69,7 @@ $corpo = [
 
 $header = [
     "Content-Type: application/json",
-    "x-goog-api-key: $apiKey"
+    "x-goog-api-key: " . GEMINI_KEY
 ];
 
 $ch = curl_init($url);
