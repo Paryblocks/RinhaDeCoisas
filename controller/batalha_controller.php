@@ -31,7 +31,7 @@ if (!$lutador_usuario || !$oponente) {
     exit;
 }
 
-$apiKey = "Minha chave da API :D";
+$apiKey = "minha chave";
 $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 $prompt = "Você é o juiz supremo de uma arena de batalhas de anime. 
@@ -109,7 +109,7 @@ if (curl_errno($ch)) {
 
             $recompensa = ($quemVenceu === 'jogador') ? 300.00 : 100.00;
 
-            $batalha = new Batalha($resultadoTexto, $recompensa, $_SESSION['usuario_id']);
+            $batalha = new Batalha($quemVenceu, $recompensa, $_SESSION['usuario_id']);
             $batalha_id = $batalha->salvar();
 
             if ($batalha_id) {
@@ -122,7 +122,10 @@ if (curl_errno($ch)) {
             }
             echo json_encode([
                 'sucesso' => true,
+                'jogador' => $lutador_usuario['nome'],
+                'img_jogador' => $lutador_usuario['imagem'],
                 'oponente' => $oponente['nome'],
+                'img_oponente' => $oponente['imagem'],
                 'resultado' => $resultadoTexto,
                 'recompensa' => $recompensa,
                 'narracao' => $narracao

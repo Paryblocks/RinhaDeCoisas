@@ -21,7 +21,21 @@ if(isset($_REQUEST['acao'])){
             exit;
         }
 
-        $novoLutador = new Lutador($_POST['nome'], $_POST['descricao'], $_POST['ataque'], $_POST['defesa'], $_POST['velocidade'], $preco, $_SESSION['usuario_id']);
+        $nome_imagem = "padrao.png";
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $arquivo = $_FILES['foto'];
+            
+            $extensao = pathinfo($arquivo['name'], PATHINFO_EXTENSION);
+            $nome_imagem = md5(uniqid(rand(), true)) . "." . $extensao;
+            $pasta_destino = __DIR__ . "/../uploads/";
+            
+            if (!is_dir($pasta_destino)) {
+                mkdir($pasta_destino, 0777, true);
+            }
+            move_uploaded_file($arquivo['tmp_name'], $pasta_destino . $nome_imagem);
+        }
+
+        $novoLutador = new Lutador($_POST['nome'], $_POST['descricao'], $_POST['ataque'], $_POST['defesa'], $_POST['velocidade'], $preco, $_SESSION['usuario_id'], $nome_imagem);
         $idLutador = $novoLutador->salvar();
         if ($idLutador) {
             $novaCompra = new Compra($_SESSION['usuario_id'], $idLutador, $preco);
@@ -95,12 +109,37 @@ if(isset($_REQUEST['acao'])){
                 header("location: ../view/item.php?id={$id}&erro=Dinheiro Insuficiente para o treinamento!");
                 exit;
             }
+
+            $nome_imagem = $valor_antigo['imagem'];
+
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $arquivo = $_FILES['foto'];
+                
+                $extensao = pathinfo($arquivo['name'], PATHINFO_EXTENSION);
+                $nova_imagem = md5(uniqid(rand(), true)) . "." . $extensao;
+                $pasta_destino = __DIR__ . "/../uploads/";
+                
+                if (!is_dir($pasta_destino)) {
+                    mkdir($pasta_destino, 0777, true);
+                }
+                move_uploaded_file($arquivo['tmp_name'], $pasta_destino . $nova_imagem);
+
+                if ($nome_imagem !== 'padrao.png' && !empty($nome_imagem)) {
+                    $caminho_foto_antiga = $pasta_destino . $nome_imagem;
+                    
+                    if (file_exists($caminho_foto_antiga)) {
+                        unlink($caminho_foto_antiga);
+                    }
+                }
+                $nome_imagem = $nova_imagem;
+            }
+
         } else {
             header("location: ../view/loja.php?erro=Lutador não encontrado.");
             exit;
         }
 
-        $lutadorAtualizado = new Lutador($_POST['nome'], $_POST['descricao'], $ataque, $defesa, $velocidade, $novo_preco, $_SESSION['usuario_id']);
+        $lutadorAtualizado = new Lutador($_POST['nome'], $_POST['descricao'], $ataque, $defesa, $velocidade, $novo_preco, $_SESSION['usuario_id'], $nome_imagem);
         if ($lutadorAtualizado->atualizar($id)) {
             if ($custo > 0) {
                 $novoSaldo = $_SESSION['saldo'] - $custo;

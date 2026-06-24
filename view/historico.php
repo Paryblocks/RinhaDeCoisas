@@ -52,7 +52,7 @@ require_once __DIR__ . "/../components/header.php";
                                 <tbody>
                                     <?php foreach ($dados_historico as $item): ?>
                                         <tr>
-                                            <td class="fw-bold text-primary"><?= htmlspecialchars($item['nome_lutador']) ?></td>
+                                            <td class="fw-bold text-primary"><a href="item.php?id=<?= $item['lutador_id'] ?> " class="text-reset text-decoration-none"><?= htmlspecialchars($item['nome_lutador']) ?></a></td>
                                             <td><span class="badge bg-success">$ <?= number_format($item['valor'], 2, ',', '.') ?></span></td>
                                             <td><?= (new DateTime($item['data_compra']))->format('d/m/Y H:i') ?></td>
                                         </tr>
@@ -73,13 +73,13 @@ require_once __DIR__ . "/../components/header.php";
                                         <tr>
                                             <td><?= (new DateTime($item['data_batalha']))->format('d/m/Y H:i') ?></td>
                                             <td class="text-center">
-                                                <span class="fw-bold text-primary"><?= htmlspecialchars($item['lutador_casa']) ?></span> 
+                                                <span class="fw-bold text-primary"><a href="item.php?id=<?= $item['id_casa'] ?>" class="text-reset text-decoration-none"><?= htmlspecialchars($item['lutador_casa']) ?></a></span> 
                                                 <span class="text-muted px-2 font-italic">VS</span> 
-                                                <span class="fw-bold text-danger"><?= htmlspecialchars($item['lutador_fora']) ?></span>
+                                                <span class="fw-bold text-danger"><a href="item.php?id=<?= $item['id_fora'] ?>" class="text-reset text-decoration-none"><?= htmlspecialchars($item['lutador_fora']) ?></a></span>
                                             </td>
                                             
                                             <td>
-                                                <?php if (strtolower($item['resultado']) === 'vitoria' || $item['resultado'] == 1): ?>
+                                                <?php if (strtolower($item['resultado']) === 'jogador' || $item['resultado'] == 1): ?>
                                                     <span class="badge bg-success">Vitória</span>
                                                 <?php else: ?>
                                                     <span class="badge bg-secondary">Derrota</span>

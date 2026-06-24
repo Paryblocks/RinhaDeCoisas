@@ -38,7 +38,9 @@ class Batalha{
             b.resultado,
             b.recompensa,
             l1.nome AS lutador_casa,
-            l2.nome AS lutador_fora
+            l2.nome AS lutador_fora,
+            l1.id AS id_casa,
+            l2.id AS id_fora
             FROM batalhas b
             INNER JOIN lutador_batalha lb1 ON b.id = lb1.batalha_id AND lb1.equipe = 'Jogador'
             INNER JOIN lutadores l1 ON lb1.lutador_id = l1.id

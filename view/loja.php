@@ -15,6 +15,7 @@ require_once __DIR__ . "/../components/header.php";
             <?php foreach ($lutadores as $lutador): ?>
                 <div class="col">
                     <div class="card h-100 shadow-sm">
+                        <img src="../uploads/<?= $lutador['imagem'] ?>" class="card-img-top" alt="<?= htmlspecialchars($lutador['nome']) ?>" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title text-primary"><?= htmlspecialchars($lutador['nome']) ?></h5>
                             <p class="card-text text-muted text-truncate"><?= htmlspecialchars($lutador['descricao']) ?></p>

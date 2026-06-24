@@ -29,6 +29,7 @@ require_once __DIR__ . "/../components/header.php";
         
         <div class="col-md-5 mb-4">
             <div class="card shadow">
+                <img src="../uploads/<?= $lutador['imagem'] ?>" class="card-img-top" alt="<?= htmlspecialchars($lutador['nome']) ?>" style="height: 200px; object-fit: cover;">
                 <div class="card-body text-center">
                     <h2 class="card-title text-primary"><?= htmlspecialchars($lutador['nome']) ?></h2>
                     <a class="text-muted" href="perfil.php?id=<?= $lutador['criador_id']?>">Criado por: <?= htmlspecialchars($donoOriginal['nome']) ?></a>
@@ -63,7 +64,7 @@ require_once __DIR__ . "/../components/header.php";
                     <h4 class="text-success mb-3">Painel de Treinamento e Edição</h4>
                     <p class="small text-muted">Como criador desse lutador, você pode modificá-lo e treiná-lo.</p>
                     
-                    <form action="../controller/lutador_controller.php" method="post">
+                    <form action="../controller/lutador_controller.php" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="acao" value="atualizar">
                         <input type="hidden" name="id" value="<?= $lutador['id'] ?>">
 
@@ -75,6 +76,11 @@ require_once __DIR__ . "/../components/header.php";
                         <div class="mb-3">
                             <label class="form-label">Descrição:</label>
                             <input type="text" name="descricao" class="form-control" value="<?= htmlspecialchars($lutador['descricao']) ?>" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Foto do Lutador</label>
+                            <input type="file" id="foto" name="foto" accept="image/*" class="form-control">
                         </div>
 
                         <div class="mb-3 font-weight-bold">

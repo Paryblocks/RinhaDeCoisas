@@ -4,12 +4,25 @@ require_once __DIR__ . "/../components/header.php";
 
 <div class="row">
     <div class="col-12 text-center my-4">
-        <h1>Bem-vindo a Rinha de Coisas!</h1>
-        <p class="lead">Compre, venda e bote seus lutadores (por mais malucos que sejam) para brigar!</p>
-        <hr>
-        <p>Para começar, crie uma conta na plataforma! Após isso compre um lutador para levar para a arena ou crie o seu próprio para os demais comprarem!</p>
-        <p>Ganhe dinheiro lutando na arena ou vendendo seus lutadores mais criativos na loja!</p>
-        <p>Continue expandindo seu elenco de lutadores com o dinheiro adquirido, eles podem ser qualquer coisa, desde uma cadeira até um megazord!</p>
+        <h1>Fale Conosco!</h1>
+        <form action="../util/mailer.php" method="post" enctype="multipart/form-data">
+            <label>Email:</label>
+            <input type="email" name="email" required/>
+            <br><br>
+            <label>Assunto:</label>
+            <input type="text" name="assunto" required/>
+            <br><br>
+            <textarea name="mensagem" id="mensagem" placeholder="Digite sua mensagem aqui!"  rows="4" cols="40" required></textarea>
+            <br><br>
+            <button type="submit">Enviar</button>
+            <br>
+            <?php if(isset($_GET['erro'])){
+                echo "<p style='color:red'>" . $_GET['erro'] . "</p>";
+            } ?>
+            <?php if(isset($_GET['sucesso'])){
+                echo "<p style='color:green'>" . $_GET['sucesso'] . "</p>";
+            } ?>
+        </form>
     </div>
 </div>
 
